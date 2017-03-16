@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>WestminsterCarParkManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;OOPCW_I_WestminsterCarParkSystem&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">WestminsterCarParkSystem</a> &gt; <span class="el_source">WestminsterCarParkManager.java</span></div><h1>WestminsterCarParkManager.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package WestminsterCarParkSystem;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
+
+/**
+ *
+ * @author laksh
+ */
+<span class="nc" id="L23">public class WestminsterCarParkManager implements CarParkManager {</span>
+
+<span class="nc" id="L25">    static int freeSlots = 20;</span>
+
+    @Override
+    public void addVehicle(Vehicle obj) {
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (obj.getVehicle_Type().equalsIgnoreCase(&quot;Van&quot;)) {</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">            if (freeSlots &gt;= 2) {</span>
+<span class="nc" id="L31">                vArray.add(obj);</span>
+<span class="nc" id="L32">                freeSlots -= 2;</span>
+<span class="nc" id="L33">                System.out.println(&quot;Currently Available Parking Slots : &quot; + freeSlots);</span>
+            } else {
+<span class="nc" id="L35">                System.out.println(&quot;No Parking Slots Available&quot;);</span>
+            }
+<span class="nc" id="L37">            System.out.println(&quot;__________&quot;);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        } else if (freeSlots &gt; 0) {</span>
+<span class="nc" id="L39">            vArray.add(obj);</span>
+<span class="nc" id="L40">            freeSlots -= 1;</span>
+<span class="nc" id="L41">            System.out.println(&quot;***************************************&quot;);</span>
+<span class="nc" id="L42">            System.out.println(&quot;Available Parking Slots : &quot; + freeSlots);</span>
+
+        } else {
+<span class="nc" id="L45">            System.out.println(&quot;***************************************&quot;);</span>
+<span class="nc" id="L46">            System.out.println(&quot;No Parking Slots Available&quot;);</span>
+<span class="nc" id="L47">            System.out.println(&quot;***************************************&quot;);</span>
+        }
+
+<span class="nc" id="L50">    }</span>
+
+    @Override
+    public void deleteVehicle(String vehicleID) {
+<span class="nc" id="L54">        Iterator&lt;Vehicle&gt; it = vArray.iterator();</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        while (it.hasNext()) {</span>
+<span class="nc" id="L57">            Vehicle v = it.next();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (v.getVehicle_ID().equalsIgnoreCase(vehicleID)) {</span>
+<span class="nc" id="L59">                it.remove();</span>
+<span class="nc" id="L60">                long leaveTime = DateTime.getCurrentTime();</span>
+<span class="nc" id="L61">                System.out.println(v.getVehicle_ID() + &quot; | &quot; + v.getVehicle_Type());</span>
+<span class="nc" id="L62">                String returnTimeArr[] = DateTime.displayTime();</span>
+<span class="nc" id="L63">                System.out.println(returnTimeArr[1] + &quot; | &quot; + returnTimeArr[0]);</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">                if (v.getVehicle_Type().equalsIgnoreCase(&quot;van&quot;)) {</span>
+<span class="nc" id="L65">                    freeSlots += 2;</span>
+
+                } else {
+<span class="nc" id="L68">                    freeSlots += 1;</span>
+
+                }
+
+                //include Charge
+<span class="nc" id="L73">                displayCharge(v, leaveTime);</span>
+            }
+
+<span class="nc" id="L76">        }</span>
+
+        //vArray.remove(obj);
+<span class="nc" id="L79">        System.out.println(&quot;***************************************&quot;);</span>
+<span class="nc" id="L80">        System.out.println(&quot;Available Parking Slots: &quot; + freeSlots);</span>
+<span class="nc" id="L81">        System.out.println(&quot;***************************************&quot;);</span>
+
+<span class="nc" id="L83">    }</span>
+
+    @Override
+    public void printStats() {
+<span class="nc" id="L87">        int countC = 0;</span>
+<span class="nc" id="L88">        int countV = 0;</span>
+<span class="nc" id="L89">        int countMB = 0;</span>
+
+        float perCar, perVan, perMotorbike;
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        for (Vehicle obj1 : vArray) {</span>
+<span class="nc bnc" id="L94" title="All 14 branches missed.">            switch (obj1.getVehicle_Type()) {</span>
+                case &quot;car&quot;:
+<span class="nc" id="L96">                    countC += 1;</span>
+<span class="nc" id="L97">                    break;</span>
+                case &quot;van&quot;:
+<span class="nc" id="L99">                    countV += 1;</span>
+<span class="nc" id="L100">                    break;</span>
+                case &quot;motorbike&quot;:
+<span class="nc" id="L102">                    countMB += 1;</span>
+<span class="nc" id="L103">                    break;</span>
+                default:
+                    break;
+            }
+
+<span class="nc" id="L108">        }</span>
+
+<span class="nc" id="L110">        perCar = countC / vArray.size() * 100;</span>
+<span class="nc" id="L111">        perVan = countV / vArray.size() * 100;</span>
+<span class="nc" id="L112">        perMotorbike = countMB / vArray.size() * 100;</span>
+<span class="nc" id="L113">        System.out.println(&quot;***************************************&quot;);</span>
+<span class="nc" id="L114">        System.out.println(&quot;Percentage of Cars :&quot; + perCar);</span>
+<span class="nc" id="L115">        System.out.println(&quot;Percentage of Vans :&quot; + perVan);</span>
+<span class="nc" id="L116">        System.out.println(&quot;Percentage of MotorBikes :&quot; + perMotorbike);</span>
+
+<span class="nc" id="L118">    }</span>
+
+    @Override
+    public void printList() {
+<span class="nc" id="L122">        ArrayList&lt;Vehicle&gt; arr = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        for (int i = 0; i &lt; vArray.size(); i++) {</span>
+<span class="nc" id="L125">            arr.add(vArray.get(i));</span>
+
+        }
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        for (int i = arr.size() - 1; i &gt;= 0; i--) {</span>
+<span class="nc" id="L129">            System.out.print(arr.get(i).getVehicle_ID());</span>
+<span class="nc" id="L130">            System.out.print(arr.get(i).getEntryTime());</span>
+<span class="nc" id="L131">            System.out.print(arr.get(i).getVehicle_Type());</span>
+
+        }
+
+<span class="nc" id="L135">    }</span>
+
+    @Override
+    public void displaySpecifiedDayList() {
+
+<span class="nc" id="L140">    }</span>
+
+    @Override
+    public void displayCharge(Vehicle obj, long leaveTime) {
+
+<span class="nc" id="L145">        int a[] = DateTime.calTime(obj.getEntry(), leaveTime);</span>
+
+        double chargeH, chargeM, chargePM;
+<span class="nc" id="L148">        int perHr = 9;</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (a[1] &lt; 3) {</span>
+<span class="nc" id="L150">            chargePM = 3 / 60;</span>
+<span class="nc" id="L151">            chargeH = (int) (a[1] * 3);</span>
+<span class="nc" id="L152">            chargeM = a[0] * chargePM;</span>
+
+        } else {
+<span class="nc" id="L155">            chargePM = 1 / 60;</span>
+<span class="nc" id="L156">            int extraHrs = a[1] - 3;</span>
+<span class="nc" id="L157">            chargeH = perHr + extraHrs * 1;</span>
+<span class="nc" id="L158">            chargeM = a[0] * chargePM;</span>
+        }
+<span class="nc" id="L160">        double charge = chargeH + chargeM;</span>
+<span class="nc" id="L161">        DecimalFormat timeFormat = new DecimalFormat(&quot;#.00&quot;);</span>
+<span class="nc" id="L162">        System.out.println(&quot;Total Charge: &quot; + timeFormat.format(charge));</span>
+<span class="nc" id="L163">    } //To change body of generated methods, choose Tools | Templates.</span>
+
+    @Override
+    public void writeData() {
+        try {
+<span class="nc" id="L168">            File f = new File(System.getProperty(&quot;user.home&quot;) + &quot;/Desktop&quot;);//gets to the users desktop</span>
+<span class="nc" id="L169">            File f2 = new File(f, &quot;WestminsterCarParkDetails.txt&quot;);//creates a text file on the desktop</span>
+<span class="nc" id="L170">            f2.createNewFile();</span>
+
+<span class="nc" id="L172">            try (BufferedWriter bw = new BufferedWriter(new FileWriter(f2))) {//uses buffered writer to write data line by line</span>
+
+<span class="nc bnc" id="L174" title="All 2 branches missed.">                for (Vehicle v : vArray) {</span>
+<span class="nc" id="L175">                    bw.write(v.getEntryDate() + &quot; &quot;);</span>
+<span class="nc" id="L176">                    bw.write(v.getVehicle_ID() + &quot; &quot;);</span>
+<span class="nc" id="L177">                    bw.write(v.getEntryTime() + &quot; &quot;);</span>
+
+<span class="nc" id="L179">                    bw.write(v.getVehicle_Type() + &quot; &quot;);</span>
+<span class="nc" id="L180">                    bw.newLine();</span>
+<span class="nc" id="L181">                }</span>
+<span class="nc" id="L182">                bw.flush();</span>
+<span class="nc" id="L183">                bw.close();</span>
+
+<span class="nc bnc" id="L185" title="All 8 branches missed.">            }</span>
+
+<span class="nc" id="L187">        } catch (Exception e) {</span>
+<span class="nc" id="L188">            System.out.println(&quot;!! File Error &quot;);</span>
+<span class="nc" id="L189">        }</span>
+
+<span class="nc" id="L191">    }</span>
+
+<span class="nc" id="L193">    static Scanner input = new Scanner(System.in);</span>
+<span class="nc" id="L194">    static CarParkManager obj = new WestminsterCarParkManager();</span>
+
+    public void mainMenu() {
+<span class="nc" id="L197">        boolean token = true;</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">        while (token) {</span>
+
+<span class="nc" id="L200">            System.out.println(&quot;******** WELCOME TO WESTMINSTER CAR PARK SYSTEM ********&quot;);</span>
+<span class="nc" id="L201">            System.out.println(&quot;1. Add Vehicle&quot;);</span>
+<span class="nc" id="L202">            System.out.println(&quot;2. Delete Vehicle&quot;);</span>
+<span class="nc" id="L203">            System.out.println(&quot;3. Vehicle Details&quot;);</span>
+<span class="nc" id="L204">            System.out.println(&quot;4. Parking Statistics&quot;);</span>
+<span class="nc" id="L205">            System.out.println(&quot;6. Search data&quot;);</span>
+<span class="nc" id="L206">            System.out.println(&quot;5. Exit&quot;);</span>
+
+<span class="nc" id="L208">            System.out.print(&quot;Press to Proceed : &quot;);</span>
+<span class="nc" id="L209">            String consoleInput = input.nextLine();</span>
+
+<span class="nc bnc" id="L211" title="All 26 branches missed.">            switch (consoleInput) {</span>
+                case &quot;1&quot;:
+<span class="nc" id="L213">                    menuaddVehicle();</span>
+<span class="nc" id="L214">                    obj.writeData();</span>
+<span class="nc" id="L215">                    System.out.println(&quot;*** Operation Sucessful ! ***&quot;);</span>
+<span class="nc" id="L216">                    break;</span>
+                case &quot;2&quot;:
+<span class="nc" id="L218">                    menudeleteVehicle();</span>
+<span class="nc" id="L219">                    System.out.println(&quot;*** Operation Sucessful ! ***&quot;);</span>
+<span class="nc" id="L220">                    break;</span>
+                case &quot;3&quot;:
+<span class="nc" id="L222">                    obj.printList();</span>
+<span class="nc" id="L223">                    System.out.println(&quot;*** Operation Sucessful ! ***&quot;);</span>
+<span class="nc" id="L224">                    break;</span>
+                case &quot;4&quot;:
+<span class="nc" id="L226">                    obj.printStats();</span>
+<span class="nc" id="L227">                    System.out.println(&quot;*** Operation Sucessful ! ***&quot;);</span>
+<span class="nc" id="L228">                    break;</span>
+                case &quot;6&quot;:
+<span class="nc" id="L230">                    menureadData();</span>
+<span class="nc" id="L231">                    break;</span>
+                case &quot;5&quot;:
+<span class="nc" id="L233">                    System.exit(0);</span>
+<span class="nc" id="L234">                    break;</span>
+                default:
+<span class="nc" id="L236">                    System.err.println(&quot;*** Invalid Input ! ***&quot;);</span>
+<span class="nc" id="L237">                    mainMenu();</span>
+                    break;
+            }
+
+<span class="nc" id="L241">        }</span>
+
+<span class="nc" id="L243">    }</span>
+
+    public static void menuaddVehicle() {
+<span class="nc" id="L246">        System.out.println(&quot;*** Add Vehicle Menu ***&quot;);</span>
+
+<span class="nc" id="L248">        System.out.print(&quot;Enter Vehicle ID :&quot;);</span>
+<span class="nc" id="L249">        String vehicle_ID = input.nextLine();</span>
+
+<span class="nc" id="L251">        System.out.print(&quot;Enter Vehicle Brand :&quot;);</span>
+<span class="nc" id="L252">        String vehicle_Brand = input.nextLine();</span>
+
+<span class="nc" id="L254">        System.out.print(&quot;Enter Vehicle Type :&quot;);</span>
+<span class="nc" id="L255">        String vehicle_Type = input.nextLine().toLowerCase();</span>
+
+<span class="nc bnc" id="L257" title="All 14 branches missed.">        switch (vehicle_Type) {</span>
+
+            case &quot;car&quot;:
+                try {
+<span class="nc" id="L261">                    System.out.print(&quot;Enter number of Doors :&quot;);</span>
+
+<span class="nc" id="L263">                    String noDoors = input.nextLine();</span>
+<span class="nc" id="L264">                    int noOfDoors = Integer.parseInt(noDoors);</span>
+
+<span class="nc" id="L266">                    System.out.print(&quot;Enter car color :&quot;);</span>
+<span class="nc" id="L267">                    String carColor = input.nextLine();</span>
+
+<span class="nc" id="L269">                    Car carObj = new Car(vehicle_ID, vehicle_Brand, vehicle_Type, noOfDoors, carColor);</span>
+<span class="nc" id="L270">                    obj.addVehicle(carObj);</span>
+<span class="nc" id="L271">                } catch (NumberFormatException e) {</span>
+<span class="nc" id="L272">                    System.out.println(&quot;**** Invalid Input ****&quot;);</span>
+<span class="nc" id="L273">                    menuaddVehicle();</span>
+<span class="nc" id="L274">                }</span>
+
+<span class="nc" id="L276">                break;</span>
+            case &quot;van&quot;:
+                try {
+<span class="nc" id="L279">                    System.out.print(&quot;Enter Cargo Volume :&quot;);</span>
+<span class="nc" id="L280">                    String scargoVolume = input.nextLine();</span>
+
+<span class="nc" id="L282">                    int cargoVolume = Integer.parseInt(scargoVolume);</span>
+
+<span class="nc" id="L284">                    Van vanObj = new Van(vehicle_ID, vehicle_Brand, vehicle_Type, cargoVolume);</span>
+<span class="nc" id="L285">                    obj.addVehicle(vanObj);</span>
+<span class="nc" id="L286">                } catch (NumberFormatException e) {</span>
+<span class="nc" id="L287">                    System.out.println(&quot;**** Invalid Input ****&quot;);</span>
+<span class="nc" id="L288">                    menuaddVehicle();</span>
+
+<span class="nc" id="L290">                }</span>
+
+<span class="nc" id="L292">                break;</span>
+
+            case &quot;motorbike&quot;:
+                try {
+<span class="nc" id="L296">                    System.out.print(&quot;Enter Engine Size :&quot;);</span>
+<span class="nc" id="L297">                    String vsizeOfEngine = input.nextLine();</span>
+
+<span class="nc" id="L299">                    int sizeOfEngine = Integer.parseInt(vsizeOfEngine);</span>
+
+<span class="nc" id="L301">                    Motorbike motoObj = new Motorbike(vehicle_ID, vehicle_Brand, vehicle_Type, sizeOfEngine);</span>
+<span class="nc" id="L302">                    obj.addVehicle(motoObj);</span>
+<span class="nc" id="L303">                } catch (NumberFormatException e) {</span>
+<span class="nc" id="L304">                    System.out.println(&quot;**** Invalid Input ****&quot;);</span>
+<span class="nc" id="L305">                    menuaddVehicle();</span>
+<span class="nc" id="L306">                }</span>
+
+<span class="nc" id="L308">                break;</span>
+            default:
+<span class="nc" id="L310">                System.err.println(&quot;*** Invalid Input ! ***&quot;);</span>
+<span class="nc" id="L311">                menuaddVehicle();</span>
+                break;
+
+        }
+
+<span class="nc" id="L316">    }</span>
+
+    public static void menudeleteVehicle() {
+<span class="nc" id="L319">        System.out.println(&quot;*** Delete Vehicle Menu ***&quot;);</span>
+
+<span class="nc" id="L321">        System.out.print(&quot;Enter Vehicle ID :&quot;);</span>
+<span class="nc" id="L322">        String vehicleID = input.nextLine();</span>
+<span class="nc" id="L323">        obj.deleteVehicle(vehicleID);</span>
+<span class="nc" id="L324">        obj.printList();</span>
+        // checkVehicleID(vehicle_ID);
+        //  obj.deleteVehicle(vehicle_ID);
+
+<span class="nc" id="L328">    }</span>
+
+    public static void menureadData() {
+<span class="nc" id="L331">        ArrayList&lt;String&gt; readData = new ArrayList&lt;&gt;(20);</span>
+        try {
+<span class="nc" id="L333">            File f = new File(System.getProperty(&quot;user.home&quot;) + &quot;/Desktop/WestminsterCarParkDetails.txt&quot;);//gets the stored file from the desktop</span>
+<span class="nc" id="L334">            BufferedReader br = new BufferedReader(new FileReader(f));//uses buffered reader</span>
+            String line;
+<span class="nc bnc" id="L336" title="All 2 branches missed.">            while ((line = br.readLine()) != null) {//reads until not null</span>
+<span class="nc" id="L337">                readData.add(line);</span>
+            }
+<span class="nc" id="L339">            br.close();</span>
+//            for (String line2 : readData) {
+//                System.out.println(line2);  
+//            }
+
+<span class="nc" id="L344">        } catch (IOException e) {</span>
+<span class="nc" id="L345">            System.out.println(&quot; File not Found &quot;);</span>
+<span class="nc" id="L346">        }</span>
+        try {
+<span class="nc" id="L348">            System.out.println(&quot;*** Search For Vehicle ***&quot;);</span>
+
+<span class="nc" id="L350">            System.out.print(&quot;Enter Day : &quot;);</span>
+<span class="nc" id="L351">            String dateS = input.nextLine();</span>
+<span class="nc" id="L352">            int date = Integer.parseInt(dateS);</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">            if (date &lt;= 31) {</span>
+<span class="nc" id="L354">                System.out.print(&quot;Enter Month : &quot;);</span>
+<span class="nc" id="L355">                String monthS = input.nextLine();</span>
+<span class="nc" id="L356">                int month = Integer.parseInt(monthS);</span>
+<span class="nc bnc" id="L357" title="All 2 branches missed.">                if (month &lt;= 12) {</span>
+<span class="nc" id="L358">                    System.out.print(&quot;Enter Year : &quot;);</span>
+<span class="nc" id="L359">                    String yearS = input.nextLine();</span>
+<span class="nc" id="L360">                    int year = Integer.parseInt(yearS);</span>
+
+<span class="nc" id="L362">                    String format = dateS + monthS + yearS;</span>
+
+<span class="nc bnc" id="L364" title="All 2 branches missed.">                    for (String check : readData) {</span>
+<span class="nc" id="L365">                        String dateArr[] = check.split(&quot;\\s&quot;);</span>
+
+<span class="nc" id="L367">                        int compre = check.compareToIgnoreCase(dateArr[0]);</span>
+<span class="nc bnc" id="L368" title="All 2 branches missed.">                        if (dateArr[0].equals(format)) {</span>
+<span class="nc" id="L369">                            System.out.print(dateArr[1] + &quot; &quot;);</span>
+<span class="nc" id="L370">                            System.out.print(dateArr[2] + &quot; &quot;);</span>
+<span class="nc" id="L371">                            System.out.print(dateArr[3] + &quot; &quot;);</span>
+<span class="nc" id="L372">                            System.out.println();</span>
+
+                        } else {
+
+<span class="nc" id="L376">                            System.out.println(&quot;*** No Vehicles Parked ***&quot;);</span>
+<span class="nc" id="L377">                            break;</span>
+                        }
+
+<span class="nc" id="L380">                    }</span>
+<span class="nc" id="L381">                } else {</span>
+<span class="nc" id="L382">                    System.err.println(&quot;*** Invalid Input ***&quot;);</span>
+                }
+
+<span class="nc" id="L385">            } else {</span>
+<span class="nc" id="L386">                System.err.println(&quot;*** Invalid Input ***&quot;);</span>
+            }
+
+<span class="nc" id="L389">        } catch (Exception e) {</span>
+<span class="nc" id="L390">            System.err.println(&quot;*** Invalid Input ***&quot;);</span>
+<span class="nc" id="L391">        }</span>
+
+<span class="nc" id="L393">    }</span>
+
+    public static void main(String[] args) {
+<span class="nc" id="L396">        WestminsterCarParkManager m = new WestminsterCarParkManager();</span>
+<span class="nc" id="L397">        m.mainMenu();</span>
+
+<span class="nc" id="L399">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

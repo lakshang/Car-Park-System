@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Vehicle.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;OOPCW_I_WestminsterCarParkSystem&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">WestminsterCarParkSystem</a> &gt; <span class="el_source">Vehicle.java</span></div><h1>Vehicle.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package WestminsterCarParkSystem;
+
+/**
+ *
+ * @author laksh
+ */
+public abstract class Vehicle {
+
+    private String vehicle_ID;
+    private String vehicle_Brand;
+    private String vehicle_Type;
+    private String entryDate;
+    private String entryTime;
+    private long entry;
+
+    /**
+     * @return the vehicle_ID
+     */
+    public String getVehicle_ID() {
+<span class="nc" id="L25">        return vehicle_ID;</span>
+    }
+
+    /**
+     * @param vehicle_ID the vehicle_ID to set
+     */
+    public void setVehicle_ID(String vehicle_ID) {
+<span class="nc" id="L32">        this.vehicle_ID = vehicle_ID;</span>
+<span class="nc" id="L33">    }</span>
+
+    /**
+     * @return the vehicle_Brand
+     */
+    public String getVehicle_Brand() {
+<span class="nc" id="L39">        return vehicle_Brand;</span>
+    }
+
+    /**
+     * @param vehicle_Brand the vehicle_Brand to set
+     */
+    public void setVehicle_Brand(String vehicle_Brand) {
+<span class="nc" id="L46">        this.vehicle_Brand = vehicle_Brand;</span>
+<span class="nc" id="L47">    }</span>
+
+    /**
+     * @return the vehicle_Type
+     */
+    public String getVehicle_Type() {
+<span class="nc" id="L53">        return vehicle_Type;</span>
+    }
+
+    /**
+     * @param vehicle_Type the vehicle_Type to set
+     */
+    public void setVehicle_Type(String vehicle_Type) {
+<span class="nc" id="L60">        this.vehicle_Type = vehicle_Type;</span>
+<span class="nc" id="L61">    }</span>
+
+    /**
+     * @return the entryDate
+     */
+    public String getEntryDate() {
+
+<span class="nc" id="L68">        return entryDate;</span>
+    }
+
+    /**
+     * @param entryDate the entryDate to set
+     */
+    public void setEntryDate() {
+<span class="nc" id="L75">        String[] time = DateTime.displayTime();</span>
+<span class="nc" id="L76">        this.entryDate = time[0];</span>
+<span class="nc" id="L77">    }</span>
+
+    /**
+     * @return the entryTime
+     */
+    public String getEntryTime() {
+<span class="nc" id="L83">        return entryTime;</span>
+    }
+
+    
+    public void setEntryTime() {
+<span class="nc" id="L88">        String[] time = DateTime.displayTime();</span>
+<span class="nc" id="L89">        this.entryTime = time[1];</span>
+
+<span class="nc" id="L91">    }</span>
+    
+<span class="nc" id="L93">    public Vehicle (String vehicle_ID, String vehicle_Brand, String vehicle_Type){</span>
+<span class="nc" id="L94">        this.vehicle_ID = vehicle_ID;</span>
+<span class="nc" id="L95">        this.vehicle_Brand = vehicle_Brand;</span>
+<span class="nc" id="L96">        this.vehicle_Type = vehicle_Type;</span>
+<span class="nc" id="L97">        setEntryTime();</span>
+<span class="nc" id="L98">        setEntryDate();</span>
+<span class="nc" id="L99">        setEntry();</span>
+<span class="nc" id="L100">    }</span>
+
+    /**
+     * @return the entry
+     */
+    public long getEntry() {
+<span class="nc" id="L106">        return entry;</span>
+    }
+
+  
+    public void setEntry() {
+<span class="nc" id="L111">        this.entry = entry=DateTime.getCurrentTime();</span>
+<span class="nc" id="L112">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

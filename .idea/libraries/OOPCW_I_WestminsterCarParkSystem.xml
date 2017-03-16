@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="OOPCW_I_WestminsterCarParkSystem">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/OOPCW_I_WestminsterCarParkSystem.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
